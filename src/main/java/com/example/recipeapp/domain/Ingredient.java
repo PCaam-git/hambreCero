@@ -1,7 +1,7 @@
 package com.example.recipeapp.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -33,9 +33,9 @@ public class Ingredient {
     private int calories;
 
     @Column
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private Season season; // spring, summer, outumn, winter
-    enum Season {
+    public enum Season {
         SPRING, SUMMER, AUTUMN, WINTER
     }
 
@@ -46,7 +46,7 @@ public class Ingredient {
     private LocalDate harvestDate;
 
     @Column(name = "price_kg")
-    @Min(value = 0, message = "Price per kg must be positive")
+    @DecimalMin(value = "0.0", message = "Price per kg must be positive")
     private BigDecimal priceKg;
 
     @Column(name = "carbon_footprint")
