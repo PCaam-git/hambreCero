@@ -30,12 +30,21 @@ public class GlobalExceptionHandler {
                 .body(ErrorResponse.generalError(400, "bad-request", "Malformed JSON or invalid value"));
     }
 
-    // 404 - Not Found
+    // 404 - Not Found individual (ingredient / recipe by id)
     @ExceptionHandler({IngredientNotFoundException.class, RecipeNotFoundException.class})
     public ResponseEntity<ErrorResponse> handleNotFound(RuntimeException ex) {
         return ResponseEntity.status(404).body(ErrorResponse.notFound(ex.getMessage()));
     }
 
+    // 404 - ingredientIds missing inside recipe POST/PUT
+   @ExceptionHandler(IngredientsNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleIngredientsNotFound(IngredientsNotFoundException ex) {
+        Map<String, String> errors = new HashMap<>();
+        errors.put("missingIngredientIds", ex.getMissingIds().toString());
+
+        return ResponseEntity.status(404)
+                .body(ErrorResponse.notFound(ex.getMessage(), errors));
+    }
     // 400 - por ejemplo Season.valueOf(...) si manda algo inválido
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleIllegalArgument(IllegalArgumentException ex) {

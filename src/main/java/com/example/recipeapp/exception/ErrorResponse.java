@@ -27,4 +27,8 @@ public class ErrorResponse {
     public static ErrorResponse validationError(Map<String, String> errors) {
         return new ErrorResponse(400, "bad-request", "Validation error", errors);
     }
+    //404 para detalles (missing id en receta por ejemplo en lista ingredientes)
+    public static ErrorResponse notFound(String message, Map<String, String> errors) {
+        return new ErrorResponse(404, "not-found", message, errors);
+    }
 }
